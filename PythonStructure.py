@@ -4,5 +4,5 @@ def display(a):
     myStructure.lib.display(a)
 
 if __name__ == "__main__":
-    a = (1,25000)
+    a = (1,25000,"Ashwini".encode('ascii'))
     display(a)    

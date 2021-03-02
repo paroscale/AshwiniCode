@@ -1,8 +1,8 @@
 typedef struct 
 {
-   /* char name[20];*/
     int id;
     float salary;
+    char name[20];
 }student;
 
 void display(student s1);

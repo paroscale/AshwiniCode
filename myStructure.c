@@ -571,12 +571,15 @@ static void (*_cffi_call_python_org)(struct _cffi_externpy_s *, char *);
 /************************************************************/
 
 static void *_cffi_types[] = {
-/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 5), // void()(student)
+/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 8), // void()(student)
 /*  1 */ _CFFI_OP(_CFFI_OP_STRUCT_UNION, 0), // student
 /*  2 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  3 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 13), // float
-/*  4 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 7), // int
-/*  5 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
+/*  3 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2), // char
+/*  4 */ _CFFI_OP(_CFFI_OP_ARRAY, 3), // char[20]
+/*  5 */ (_cffi_opcode_t)(20),
+/*  6 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 13), // float
+/*  7 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 7), // int
+/*  8 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
 };
 
 _CFFI_UNUSED_FN
@@ -586,6 +589,7 @@ static void _cffi_checkfld_typedef_student(student *p)
   (void)p;
   (void)((p->id) | 0);  /* check that 'student.id' is an integer */
   { float *tmp = &p->salary; (void)tmp; }
+  { char(*tmp)[20] = &p->name; (void)tmp; }
 }
 struct _cffi_align_typedef_student { char x; student y; };
 
@@ -626,15 +630,18 @@ static const struct _cffi_global_s _cffi_globals[] = {
 static const struct _cffi_field_s _cffi_fields[] = {
   { "id", offsetof(student, id),
           sizeof(((student *)0)->id),
-          _CFFI_OP(_CFFI_OP_NOOP, 4) },
+          _CFFI_OP(_CFFI_OP_NOOP, 7) },
   { "salary", offsetof(student, salary),
               sizeof(((student *)0)->salary),
-              _CFFI_OP(_CFFI_OP_NOOP, 3) },
+              _CFFI_OP(_CFFI_OP_NOOP, 6) },
+  { "name", offsetof(student, name),
+            sizeof(((student *)0)->name),
+            _CFFI_OP(_CFFI_OP_NOOP, 4) },
 };
 
 static const struct _cffi_struct_union_s _cffi_struct_unions[] = {
   { "$student", 1, _CFFI_F_CHECK_FIELDS,
-    sizeof(student), offsetof(struct _cffi_align_typedef_student, y), 0, 2 },
+    sizeof(student), offsetof(struct _cffi_align_typedef_student, y), 0, 3 },
 };
 
 static const struct _cffi_typename_s _cffi_typenames[] = {
@@ -653,7 +660,7 @@ static const struct _cffi_type_context_s _cffi_type_context = {
   0,  /* num_enums */
   1,  /* num_typenames */
   NULL,  /* no includes */
-  6,  /* num_types */
+  9,  /* num_types */
   0,  /* flags */
 };
 
