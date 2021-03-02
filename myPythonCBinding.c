@@ -571,18 +571,19 @@ static void (*_cffi_call_python_org)(struct _cffi_externpy_s *, char *);
 /************************************************************/
 
 static void *_cffi_types[] = {
-/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 9), // int()(char *, char *)
-/*  1 */ _CFFI_OP(_CFFI_OP_POINTER, 7), // char *
+/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 10), // int()(char * *, char * *)
+/*  1 */ _CFFI_OP(_CFFI_OP_POINTER, 7), // char * *
 /*  2 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
 /*  3 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  4 */ _CFFI_OP(_CFFI_OP_FUNCTION, 11), // void()(struct API *)
-/*  5 */ _CFFI_OP(_CFFI_OP_POINTER, 10), // struct API *
+/*  4 */ _CFFI_OP(_CFFI_OP_FUNCTION, 12), // void()(struct API *)
+/*  5 */ _CFFI_OP(_CFFI_OP_POINTER, 11), // struct API *
 /*  6 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  7 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2), // char
-/*  8 */ _CFFI_OP(_CFFI_OP_POINTER, 0), // int(*)(char *, char *)
-/*  9 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 7), // int
-/* 10 */ _CFFI_OP(_CFFI_OP_STRUCT_UNION, 0), // struct API
-/* 11 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
+/*  7 */ _CFFI_OP(_CFFI_OP_POINTER, 8), // char *
+/*  8 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2), // char
+/*  9 */ _CFFI_OP(_CFFI_OP_POINTER, 0), // int(*)(char * *, char * *)
+/* 10 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 7), // int
+/* 11 */ _CFFI_OP(_CFFI_OP_STRUCT_UNION, 0), // struct API
+/* 12 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
 };
 
 static void _cffi_d_call_python_func(struct API * x0)
@@ -626,8 +627,8 @@ static void _cffi_checkfld_struct_API(struct API *p)
 {
   /* only to generate compile-time warnings or errors */
   (void)p;
-  { int(* *tmp)(char *, char *) = &p->read; (void)tmp; }
-  { int(* *tmp)(char *, char *) = &p->write; (void)tmp; }
+  { int(* *tmp)(char * *, char * *) = &p->read; (void)tmp; }
+  { int(* *tmp)(char * *, char * *) = &p->write; (void)tmp; }
 }
 struct _cffi_align_struct_API { char x; struct API y; };
 
@@ -638,14 +639,14 @@ static const struct _cffi_global_s _cffi_globals[] = {
 static const struct _cffi_field_s _cffi_fields[] = {
   { "read", offsetof(struct API, read),
             sizeof(((struct API *)0)->read),
-            _CFFI_OP(_CFFI_OP_NOOP, 8) },
+            _CFFI_OP(_CFFI_OP_NOOP, 9) },
   { "write", offsetof(struct API, write),
              sizeof(((struct API *)0)->write),
-             _CFFI_OP(_CFFI_OP_NOOP, 8) },
+             _CFFI_OP(_CFFI_OP_NOOP, 9) },
 };
 
 static const struct _cffi_struct_union_s _cffi_struct_unions[] = {
-  { "API", 10, _CFFI_F_CHECK_FIELDS,
+  { "API", 11, _CFFI_F_CHECK_FIELDS,
     sizeof(struct API), offsetof(struct _cffi_align_struct_API, y), 0, 2 },
 };
 
@@ -661,7 +662,7 @@ static const struct _cffi_type_context_s _cffi_type_context = {
   0,  /* num_enums */
   0,  /* num_typenames */
   NULL,  /* no includes */
-  12,  /* num_types */
+  13,  /* num_types */
   0,  /* flags */
 };
 
