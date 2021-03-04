@@ -1,9 +1,8 @@
 #include "CFunction.h"
 #include <stdio.h>
 
-void call_python_func(struct API *my_api)
+void call_python_func(API a1 )
 {
-   //printf("%c",my_api->read("abcd","efgh"));
-   //printf("%c",my_api->raft_uuid);
-   printf("%c" ,my_api->read("bssb","ssf"))
+   printf("my raft uuid in c is: %s \n" ,a1.raft_uuid );
+   printf("my peer uuid in c is: %s \n" , a1.peer_uuid);
 };

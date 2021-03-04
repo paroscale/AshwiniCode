@@ -571,22 +571,26 @@ static void (*_cffi_call_python_org)(struct _cffi_externpy_s *, char *);
 /************************************************************/
 
 static void *_cffi_types[] = {
-/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 10), // int()(char * *, char * *)
-/*  1 */ _CFFI_OP(_CFFI_OP_POINTER, 7), // char * *
-/*  2 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
-/*  3 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  4 */ _CFFI_OP(_CFFI_OP_FUNCTION, 12), // void()(struct API *)
-/*  5 */ _CFFI_OP(_CFFI_OP_POINTER, 11), // struct API *
-/*  6 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  7 */ _CFFI_OP(_CFFI_OP_POINTER, 8), // char *
-/*  8 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2), // char
-/*  9 */ _CFFI_OP(_CFFI_OP_POINTER, 0), // int(*)(char * *, char * *)
-/* 10 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 7), // int
-/* 11 */ _CFFI_OP(_CFFI_OP_STRUCT_UNION, 0), // struct API
-/* 12 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
+/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 6), // void()(API)
+/*  1 */ _CFFI_OP(_CFFI_OP_STRUCT_UNION, 0), // API
+/*  2 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
+/*  3 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2), // char
+/*  4 */ _CFFI_OP(_CFFI_OP_ARRAY, 3), // char[20]
+/*  5 */ (_cffi_opcode_t)(20),
+/*  6 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
 };
 
-static void _cffi_d_call_python_func(struct API * x0)
+_CFFI_UNUSED_FN
+static void _cffi_checkfld_typedef_API(API *p)
+{
+  /* only to generate compile-time warnings or errors */
+  (void)p;
+  { char(*tmp)[20] = &p->raft_uuid; (void)tmp; }
+  { char(*tmp)[20] = &p->peer_uuid; (void)tmp; }
+}
+struct _cffi_align_typedef_API { char x; API y; };
+
+static void _cffi_d_call_python_func(API x0)
 {
   call_python_func(x0);
 }
@@ -594,18 +598,10 @@ static void _cffi_d_call_python_func(struct API * x0)
 static PyObject *
 _cffi_f_call_python_func(PyObject *self, PyObject *arg0)
 {
-  struct API * x0;
-  Py_ssize_t datasize;
-  struct _cffi_freeme_s *large_args_free = NULL;
+  API x0;
 
-  datasize = _cffi_prepare_pointer_call_argument(
-      _cffi_type(5), arg0, (char **)&x0);
-  if (datasize != 0) {
-    x0 = ((size_t)datasize) <= 640 ? (struct API *)alloca((size_t)datasize) : NULL;
-    if (_cffi_convert_array_argument(_cffi_type(5), arg0, (char **)&x0,
-            datasize, &large_args_free) < 0)
-      return NULL;
-  }
+  if (_cffi_to_c((char *)&x0, _cffi_type(1), arg0) < 0)
+    return NULL;
 
   Py_BEGIN_ALLOW_THREADS
   _cffi_restore_errno();
@@ -614,40 +610,36 @@ _cffi_f_call_python_func(PyObject *self, PyObject *arg0)
   Py_END_ALLOW_THREADS
 
   (void)self; /* unused */
-  if (large_args_free != NULL) _cffi_free_array_arguments(large_args_free);
   Py_INCREF(Py_None);
   return Py_None;
 }
 #else
-#  define _cffi_f_call_python_func _cffi_d_call_python_func
+static void _cffi_f_call_python_func(API *x0)
+{
+  { call_python_func(*x0); }
+}
 #endif
 
-_CFFI_UNUSED_FN
-static void _cffi_checkfld_struct_API(struct API *p)
-{
-  /* only to generate compile-time warnings or errors */
-  (void)p;
-  { int(* *tmp)(char * *, char * *) = &p->read; (void)tmp; }
-  { int(* *tmp)(char * *, char * *) = &p->write; (void)tmp; }
-}
-struct _cffi_align_struct_API { char x; struct API y; };
-
 static const struct _cffi_global_s _cffi_globals[] = {
-  { "call_python_func", (void *)_cffi_f_call_python_func, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_O, 4), (void *)_cffi_d_call_python_func },
+  { "call_python_func", (void *)_cffi_f_call_python_func, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_O, 0), (void *)_cffi_d_call_python_func },
 };
 
 static const struct _cffi_field_s _cffi_fields[] = {
-  { "read", offsetof(struct API, read),
-            sizeof(((struct API *)0)->read),
-            _CFFI_OP(_CFFI_OP_NOOP, 9) },
-  { "write", offsetof(struct API, write),
-             sizeof(((struct API *)0)->write),
-             _CFFI_OP(_CFFI_OP_NOOP, 9) },
+  { "raft_uuid", offsetof(API, raft_uuid),
+                 sizeof(((API *)0)->raft_uuid),
+                 _CFFI_OP(_CFFI_OP_NOOP, 4) },
+  { "peer_uuid", offsetof(API, peer_uuid),
+                 sizeof(((API *)0)->peer_uuid),
+                 _CFFI_OP(_CFFI_OP_NOOP, 4) },
 };
 
 static const struct _cffi_struct_union_s _cffi_struct_unions[] = {
-  { "API", 11, _CFFI_F_CHECK_FIELDS,
-    sizeof(struct API), offsetof(struct _cffi_align_struct_API, y), 0, 2 },
+  { "$API", 1, _CFFI_F_CHECK_FIELDS,
+    sizeof(API), offsetof(struct _cffi_align_typedef_API, y), 0, 2 },
+};
+
+static const struct _cffi_typename_s _cffi_typenames[] = {
+  { "API", 1 },
 };
 
 static const struct _cffi_type_context_s _cffi_type_context = {
@@ -656,13 +648,13 @@ static const struct _cffi_type_context_s _cffi_type_context = {
   _cffi_fields,
   _cffi_struct_unions,
   NULL,  /* no enums */
-  NULL,  /* no typenames */
+  _cffi_typenames,
   1,  /* num_globals */
   1,  /* num_struct_unions */
   0,  /* num_enums */
-  0,  /* num_typenames */
+  1,  /* num_typenames */
   NULL,  /* no includes */
-  13,  /* num_types */
+  7,  /* num_types */
   0,  /* flags */
 };
 
