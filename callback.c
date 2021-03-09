@@ -9,3 +9,8 @@ callbackchar get_somedata(char name[20]) {
     printf("Returning callbackchar %s\n", somedata.name);
     return somedata;
 }
+
+void library_function(char (*fun_ptr)(char), char x)
+{
+	fun_ptr(x);
+}
