@@ -1,5 +1,4 @@
-from mylib import ffi,lib
-import mylib
+from mylib import ffi, lib
 
 class callbackchar():
     def __init__(self,name):
@@ -10,15 +9,19 @@ class callbackchar():
 @ffi.def_extern()
 def my_callback(x):
     print("Inside python callback function")
-    z= x + "my_call_back_function"
-    print("Returning x value ", z)
+    z = "A"
+    print("Returning z value ", z)
     return z
     
 
 if __name__ == '__main__':
 
     print("Pass a struct into C")
-    a = callbackchar("Ashwini".encode('ascii'))
+    b= "Ashwini".encode('ascii')
+    a = callbackchar(b)
     print("callbackchar in python is", a)
     a.show_somedata()
-    lib.library_function(lib.my_callback,"ashwini".encode('ascii'))
+    #s = ("Ashwini".encode('ascii'))
+    s = [ffi.new("char[]","ashwini".encode('ascii'))]
+    t = ffi.new("char *[]",s)
+    lib.library_function(lib.my_callback,t)

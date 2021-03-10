@@ -4,7 +4,7 @@ import cffi
 if __name__ == "__main__":
     ffi = cffi.FFI()
     # Define the python callback function
-    ffi.embedding_api(""" extern "Python" char my_callback(char); """)
+    ffi.embedding_api(""" extern "Python" char* my_callback(char*); """)
 
     # Get the functions declarations from C library
     with open(os.path.join(os.path.dirname(__file__), "callback.h")) as f:
