@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include "callback.h"
-void show_somedata(callbackchar somedata) {
-    printf("call back char in C is %s\n", somedata.name);
+void show_somedata(callbackchar somedata)
+{
+    printf("call back char in C is {%s,%s} \n", somedata.s1,somedata.s2);
 }
 
-callbackchar get_somedata(char name[20]) {
-    callbackchar somedata = { {name[20]} };
-    printf("Returning callbackchar %s\n", somedata.name);
+callbackchar get_somedata(char s1[20] , char s2[20])
+{
+    callbackchar somedata = { {s1[20],s2[20]}};
+    printf("Returning callbackchar {%s,%s} \n", somedata.s1 , somedata.s2);
     return somedata;
 }
 
-void library_function(char (*fun_ptr)(char), char x)
+void library_function(int (*fun_ptr)(char* ,char*), char* x , char* y)
 {
-	fun_ptr(x);
+	int z = fun_ptr(x,y);
+    printf("the value of z is: %d " , z);
 }

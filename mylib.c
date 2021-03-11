@@ -1257,53 +1257,61 @@ static int cffi_start_python(void)
 /************************************************************/
 
 static void *_cffi_types[] = {
-/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 10), // callbackchar()(char *)
-/*  1 */ _CFFI_OP(_CFFI_OP_POINTER, 7), // char *
-/*  2 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  3 */ _CFFI_OP(_CFFI_OP_FUNCTION, 1), // char *()(char *)
-/*  4 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
-/*  5 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  6 */ _CFFI_OP(_CFFI_OP_FUNCTION, 7), // char()(char)
-/*  7 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2), // char
-/*  8 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/*  9 */ _CFFI_OP(_CFFI_OP_FUNCTION, 19), // void()(callbackchar)
-/* 10 */ _CFFI_OP(_CFFI_OP_STRUCT_UNION, 0), // callbackchar
-/* 11 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/* 12 */ _CFFI_OP(_CFFI_OP_FUNCTION, 19), // void()(char(*)(char), char)
-/* 13 */ _CFFI_OP(_CFFI_OP_POINTER, 6), // char(*)(char)
-/* 14 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2),
+/*  0 */ _CFFI_OP(_CFFI_OP_FUNCTION, 9), // callbackchar()(char *, char *)
+/*  1 */ _CFFI_OP(_CFFI_OP_POINTER, 16), // char *
+/*  2 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
+/*  3 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
+/*  4 */ _CFFI_OP(_CFFI_OP_FUNCTION, 19), // int()(char *, char *)
+/*  5 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
+/*  6 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
+/*  7 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
+/*  8 */ _CFFI_OP(_CFFI_OP_FUNCTION, 20), // void()(callbackchar)
+/*  9 */ _CFFI_OP(_CFFI_OP_STRUCT_UNION, 0), // callbackchar
+/* 10 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
+/* 11 */ _CFFI_OP(_CFFI_OP_FUNCTION, 20), // void()(int(*)(char *, char *), char *, char *)
+/* 12 */ _CFFI_OP(_CFFI_OP_POINTER, 4), // int(*)(char *, char *)
+/* 13 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
+/* 14 */ _CFFI_OP(_CFFI_OP_NOOP, 1),
 /* 15 */ _CFFI_OP(_CFFI_OP_FUNCTION_END, 0),
-/* 16 */ _CFFI_OP(_CFFI_OP_POINTER, 3), // char *(*)(char *)
-/* 17 */ _CFFI_OP(_CFFI_OP_ARRAY, 7), // char[20]
+/* 16 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 2), // char
+/* 17 */ _CFFI_OP(_CFFI_OP_ARRAY, 16), // char[20]
 /* 18 */ (_cffi_opcode_t)(20),
-/* 19 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
+/* 19 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 7), // int
+/* 20 */ _CFFI_OP(_CFFI_OP_PRIMITIVE, 0), // void
 };
 
 static struct _cffi_externpy_s _cffi_externpy__my_callback =
-  { "mylib.my_callback", (int)sizeof(char *), 0, 0 };
+  { "mylib.my_callback", (int)sizeof(int), 0, 0 };
 
-CFFI_DLLEXPORT char * my_callback(char * a0)
+CFFI_DLLEXPORT int my_callback(char * a0, char * a1)
 {
-  char a[8];
+  char a[16];
   char *p = a;
   *(char * *)(p + 0) = a0;
+  *(char * *)(p + 8) = a1;
   _cffi_call_python(&_cffi_externpy__my_callback, p);
-  return *(char * *)p;
+  return *(int *)p;
 }
 
-static callbackchar _cffi_d_get_somedata(char * x0)
+static callbackchar _cffi_d_get_somedata(char * x0, char * x1)
 {
-  return get_somedata(x0);
+  return get_somedata(x0, x1);
 }
 #ifndef PYPY_VERSION
 static PyObject *
-_cffi_f_get_somedata(PyObject *self, PyObject *arg0)
+_cffi_f_get_somedata(PyObject *self, PyObject *args)
 {
   char * x0;
+  char * x1;
   Py_ssize_t datasize;
   struct _cffi_freeme_s *large_args_free = NULL;
   callbackchar result;
   PyObject *pyresult;
+  PyObject *arg0;
+  PyObject *arg1;
+
+  if (!PyArg_UnpackTuple(args, "get_somedata", 2, 2, &arg0, &arg1))
+    return NULL;
 
   datasize = _cffi_prepare_pointer_call_argument(
       _cffi_type(1), arg0, (char **)&x0);
@@ -1314,55 +1322,83 @@ _cffi_f_get_somedata(PyObject *self, PyObject *arg0)
       return NULL;
   }
 
+  datasize = _cffi_prepare_pointer_call_argument(
+      _cffi_type(1), arg1, (char **)&x1);
+  if (datasize != 0) {
+    x1 = ((size_t)datasize) <= 640 ? (char *)alloca((size_t)datasize) : NULL;
+    if (_cffi_convert_array_argument(_cffi_type(1), arg1, (char **)&x1,
+            datasize, &large_args_free) < 0)
+      return NULL;
+  }
+
   Py_BEGIN_ALLOW_THREADS
   _cffi_restore_errno();
-  { result = get_somedata(x0); }
+  { result = get_somedata(x0, x1); }
   _cffi_save_errno();
   Py_END_ALLOW_THREADS
 
   (void)self; /* unused */
-  pyresult = _cffi_from_c_struct((char *)&result, _cffi_type(10));
+  pyresult = _cffi_from_c_struct((char *)&result, _cffi_type(9));
   if (large_args_free != NULL) _cffi_free_array_arguments(large_args_free);
   return pyresult;
 }
 #else
-static void _cffi_f_get_somedata(callbackchar *result, char * x0)
+static void _cffi_f_get_somedata(callbackchar *result, char * x0, char * x1)
 {
-  { *result = get_somedata(x0); }
+  { *result = get_somedata(x0, x1); }
 }
 #endif
 
-static void _cffi_d_library_function(char(* x0)(char), char x1)
+static void _cffi_d_library_function(int(* x0)(char *, char *), char * x1, char * x2)
 {
-  library_function(x0, x1);
+  library_function(x0, x1, x2);
 }
 #ifndef PYPY_VERSION
 static PyObject *
 _cffi_f_library_function(PyObject *self, PyObject *args)
 {
-  char(* x0)(char);
-  char x1;
+  int(* x0)(char *, char *);
+  char * x1;
+  char * x2;
+  Py_ssize_t datasize;
+  struct _cffi_freeme_s *large_args_free = NULL;
   PyObject *arg0;
   PyObject *arg1;
+  PyObject *arg2;
 
-  if (!PyArg_UnpackTuple(args, "library_function", 2, 2, &arg0, &arg1))
+  if (!PyArg_UnpackTuple(args, "library_function", 3, 3, &arg0, &arg1, &arg2))
     return NULL;
 
-  x0 = (char(*)(char))_cffi_to_c_pointer(arg0, _cffi_type(13));
-  if (x0 == (char(*)(char))NULL && PyErr_Occurred())
+  x0 = (int(*)(char *, char *))_cffi_to_c_pointer(arg0, _cffi_type(12));
+  if (x0 == (int(*)(char *, char *))NULL && PyErr_Occurred())
     return NULL;
 
-  x1 = (char)_cffi_to_c_char(arg1);
-  if (x1 == (char)-1 && PyErr_Occurred())
-    return NULL;
+  datasize = _cffi_prepare_pointer_call_argument(
+      _cffi_type(1), arg1, (char **)&x1);
+  if (datasize != 0) {
+    x1 = ((size_t)datasize) <= 640 ? (char *)alloca((size_t)datasize) : NULL;
+    if (_cffi_convert_array_argument(_cffi_type(1), arg1, (char **)&x1,
+            datasize, &large_args_free) < 0)
+      return NULL;
+  }
+
+  datasize = _cffi_prepare_pointer_call_argument(
+      _cffi_type(1), arg2, (char **)&x2);
+  if (datasize != 0) {
+    x2 = ((size_t)datasize) <= 640 ? (char *)alloca((size_t)datasize) : NULL;
+    if (_cffi_convert_array_argument(_cffi_type(1), arg2, (char **)&x2,
+            datasize, &large_args_free) < 0)
+      return NULL;
+  }
 
   Py_BEGIN_ALLOW_THREADS
   _cffi_restore_errno();
-  { library_function(x0, x1); }
+  { library_function(x0, x1, x2); }
   _cffi_save_errno();
   Py_END_ALLOW_THREADS
 
   (void)self; /* unused */
+  if (large_args_free != NULL) _cffi_free_array_arguments(large_args_free);
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -1380,7 +1416,7 @@ _cffi_f_show_somedata(PyObject *self, PyObject *arg0)
 {
   callbackchar x0;
 
-  if (_cffi_to_c((char *)&x0, _cffi_type(10), arg0) < 0)
+  if (_cffi_to_c((char *)&x0, _cffi_type(9), arg0) < 0)
     return NULL;
 
   Py_BEGIN_ALLOW_THREADS
@@ -1405,30 +1441,34 @@ static void _cffi_checkfld__callbackchar(callbackchar *p)
 {
   /* only to generate compile-time warnings or errors */
   (void)p;
-  { char(*tmp)[20] = &p->name; (void)tmp; }
+  { char(*tmp)[20] = &p->s1; (void)tmp; }
+  { char(*tmp)[20] = &p->s2; (void)tmp; }
 }
 struct _cffi_align__callbackchar { char x; callbackchar y; };
 
 static const struct _cffi_global_s _cffi_globals[] = {
-  { "get_somedata", (void *)_cffi_f_get_somedata, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_O, 0), (void *)_cffi_d_get_somedata },
-  { "library_function", (void *)_cffi_f_library_function, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_V, 12), (void *)_cffi_d_library_function },
-  { "my_callback", (void *)&_cffi_externpy__my_callback, _CFFI_OP(_CFFI_OP_EXTERN_PYTHON, 16), (void *)my_callback },
-  { "show_somedata", (void *)_cffi_f_show_somedata, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_O, 9), (void *)_cffi_d_show_somedata },
+  { "get_somedata", (void *)_cffi_f_get_somedata, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_V, 0), (void *)_cffi_d_get_somedata },
+  { "library_function", (void *)_cffi_f_library_function, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_V, 11), (void *)_cffi_d_library_function },
+  { "my_callback", (void *)&_cffi_externpy__my_callback, _CFFI_OP(_CFFI_OP_EXTERN_PYTHON, 12), (void *)my_callback },
+  { "show_somedata", (void *)_cffi_f_show_somedata, _CFFI_OP(_CFFI_OP_CPYTHON_BLTN_O, 8), (void *)_cffi_d_show_somedata },
 };
 
 static const struct _cffi_field_s _cffi_fields[] = {
-  { "name", offsetof(callbackchar, name),
-            sizeof(((callbackchar *)0)->name),
-            _CFFI_OP(_CFFI_OP_NOOP, 17) },
+  { "s1", offsetof(callbackchar, s1),
+          sizeof(((callbackchar *)0)->s1),
+          _CFFI_OP(_CFFI_OP_NOOP, 17) },
+  { "s2", offsetof(callbackchar, s2),
+          sizeof(((callbackchar *)0)->s2),
+          _CFFI_OP(_CFFI_OP_NOOP, 17) },
 };
 
 static const struct _cffi_struct_union_s _cffi_struct_unions[] = {
-  { "callbackchar", 10, _CFFI_F_CHECK_FIELDS,
-    sizeof(callbackchar), offsetof(struct _cffi_align__callbackchar, y), 0, 1 },
+  { "callbackchar", 9, _CFFI_F_CHECK_FIELDS,
+    sizeof(callbackchar), offsetof(struct _cffi_align__callbackchar, y), 0, 2 },
 };
 
 static const struct _cffi_typename_s _cffi_typenames[] = {
-  { "callbackchar", 10 },
+  { "callbackchar", 9 },
 };
 
 static const struct _cffi_type_context_s _cffi_type_context = {
@@ -1443,7 +1483,7 @@ static const struct _cffi_type_context_s _cffi_type_context = {
   0,  /* num_enums */
   1,  /* num_typenames */
   NULL,  /* no includes */
-  20,  /* num_types */
+  21,  /* num_types */
   1,  /* flags */
 };
 

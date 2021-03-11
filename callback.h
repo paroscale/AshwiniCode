@@ -1,8 +1,9 @@
 typedef struct callbackchar callbackchar;
 struct callbackchar
 {
-  char name[20];
+  char s1[20];
+  char s2[20];
 };
 void show_somedata(callbackchar somedata);
-callbackchar get_somedata(char name[20]);
-void library_function(char (*fun_ptr)(char), char x);
+callbackchar get_somedata(char s1[20] , char s2[20]);
+void library_function(int (*fun_ptr)(char* ,char*), char* x , char* y);
