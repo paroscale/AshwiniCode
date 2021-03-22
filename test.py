@@ -4,11 +4,13 @@ class Myfile():
     def process(self):
         h = ffi.new_handle(self)
         print("h values is ",h)
-        print("in init function")
+        print("in process function")
         lib.example(lib.my_callback,45,56,h)
 
     def callback (self,agr1 , agr2):
-        print("dbbdliknckcbz")
+        print("in callback function values are ")
+        h = ffi.new_handle(self)
+        lib.example(lib.my_callback,23,69,h)
 
 @ffi.def_extern()
 def my_callback(agr1 , h):
@@ -16,6 +18,7 @@ def my_callback(agr1 , h):
     print("in python callback function")
     agr1  = ffi.cast("int", 42)
     print( "ffi.cast value = ",agr1)
+    print(" h value in my_callback is :",h)
     return 0
     #return ffi.from_handle(h).callback(agr1)
    
