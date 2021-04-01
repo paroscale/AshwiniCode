@@ -27,6 +27,11 @@ void c_wrapper_fun(char* raft_uuid, char* peer_uuid, int (*applycb_ptr)(char *, 
 	}
 
 
-void call_python_func(pmdb_callback_ptr *call_back){   
-    printf ("in c call_python fucntion \n");
-    }
+void call_python_func(pmdb_callback_ptr *call_back , char *raft_uuid,
+								char *peer_uuid){   
+    printf ("in c call_python function \n");
+	int value5 = call_back->applycb_ptr(raft_uuid, peer_uuid);
+	printf("value 5 is %d", value5);
+	int value6 = call_back->readcb_ptr(raft_uuid, peer_uuid);
+	printf("value 6 is %d", value6);
+	}

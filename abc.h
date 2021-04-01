@@ -10,4 +10,5 @@ void passing_struct_func_ptr( pmdb_callback_ptr *call_back, char *raft_uuid,
 void c_wrapper_fun(char *raft_uuid, char *peer_uuid, int (*applycb_ptr)(char *, char *),
 					int (*readcb_ptr)(char *, char *));
 
-void call_python_func(pmdb_callback_ptr *call_back);
+void call_python_func(pmdb_callback_ptr *call_back,char *raft_uuid,
+								char *peer_uuid);

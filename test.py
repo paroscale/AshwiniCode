@@ -17,11 +17,12 @@ def ReadCb(raft_uuid, peer_uuid):
    
 def display_Using_Structure_Pointer():
     print("In Python  display_Using_Structure_Pointer Function!!!!\n")
-    #a = (ffi.string(raft_uuid), ffi.string(peer_uuid))
-    print(a)
-    values  = myabc.ffi.new("pmdb_callback_ptr*", a)
+    values  = myabc.ffi.new("pmdb_callback_ptr*")
     print(values)
-    myabc.lib.call_python_func(values)
+    values.applycb_ptr = lib.ApplyCb
+    values.readcb_ptr = lib.ReadCb
+    myabc.lib.call_python_func(values,raft_uuid,peer_uuid)
+
 
 
 if __name__=="__main__":
